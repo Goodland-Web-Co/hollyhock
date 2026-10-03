@@ -1,4 +1,4 @@
-const { priced, email } = JSON.parse(document.getElementById('shop-data').textContent);
+﻿const { priced, email } = JSON.parse(document.getElementById('shop-data').textContent);
 const $ = (id) => document.getElementById(id);
 const money = (n) => (Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`);
 
@@ -39,12 +39,26 @@ if (row) {
   const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let at = 0;
   let timer = null;
-  const show = (n) => {
+  const mark = (n) => {
     at = (n + slides.length) % slides.length;
     slides.forEach((li, k) => li.classList.toggle('is-active', k === at));
     $('strip-now').textContent = String(at + 1).padStart(2, '0');
+  };
+  const show = (n) => {
+    mark(n);
     if (!wide.matches) slides[at].scrollIntoView({ behavior: calm ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
   };
+  // on small screens the row scrolls by hand, so the counter follows whichever photo is nearest the left edge
+  const follow = () => {
+    if (wide.matches) return;
+    const x = row.scrollLeft + slides[0].offsetLeft;
+    let near = 0;
+    slides.forEach((li, k) => { if (Math.abs(li.offsetLeft - x) < Math.abs(slides[near].offsetLeft - x)) near = k; });
+    if (near !== at) mark(near);
+  };
+  row.addEventListener('scroll', follow, { passive: true });
+  row.addEventListener('scrollend', follow);
+  row.addEventListener('touchend', () => setTimeout(follow, 400), { passive: true });
   const play = () => { stop(); if (!calm && wide.matches) timer = setInterval(() => show(at + 1), 4200); };
   const stop = () => { clearInterval(timer); timer = null; };
   slides.forEach((li, k) => {
@@ -59,7 +73,15 @@ if (row) {
   strip.addEventListener('pointerleave', play);
   strip.addEventListener('focusin', stop);
   strip.addEventListener('focusout', play);
-  new IntersectionObserver(([e]) => (e.isIntersecting ? play() : stop()), { threshold: 0.3 }).observe(strip);
+  // while the strip is on screen, a light check keeps the counter honest even if a scroll event is missed
+  let watch = null;
+  let lastX = row.scrollLeft;
+  new IntersectionObserver(([entry]) => {
+    clearInterval(watch); watch = null;
+    if (!entry.isIntersecting) { stop(); return; }
+    play();
+    watch = setInterval(() => { if (row.scrollLeft !== lastX) { lastX = row.scrollLeft; follow(); } }, 250);
+  }, { threshold: 0.3 }).observe(strip);
 }
 
 /* ---------- order slip ---------- */
@@ -90,7 +112,7 @@ function renderSlip() {
       </div>`;
     li.querySelector('.line-top span').textContent = p.name;
     const [less, more] = li.querySelectorAll('button');
-    less.textContent = '−';
+    less.textContent = 'âˆ’';
     more.textContent = '+';
     less.setAttribute('aria-label', `One fewer, ${p.name}`);
     more.setAttribute('aria-label', `One more, ${p.name}`);
@@ -172,7 +194,7 @@ if (maker) {
     $('bunch-lines').replaceChildren(...ids.map((id) => {
       const li = document.createElement('li');
       const name = document.createElement('span');
-      name.textContent = `${bunch[id]} × ${priced[id].name}`;
+      name.textContent = `${bunch[id]} Ã— ${priced[id].name}`;
       const cost = document.createElement('span');
       cost.className = 'bunch-cost';
       cost.textContent = money(priced[id].price * bunch[id]);
