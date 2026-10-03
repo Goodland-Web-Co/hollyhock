@@ -1,4 +1,4 @@
-// price is in dollars per unit.
+﻿// price is in dollars per unit.
 export const flowers = [
   {
     id: 'ranunculus', photo: 'ranunculus', name: 'Ranunculus, peach', latin: 'Ranunculus asiaticus',
@@ -43,7 +43,7 @@ export const flowers = [
     alt: 'Pink tulips wrapped in brown paper.',
   },
   {
-    id: 'chrysanthemums', photo: 'chrysanthemums', name: 'Chrysanthemums, bronze', latin: 'Chrysanthemum × morifolium',
+    id: 'chrysanthemums', photo: 'chrysanthemums', name: 'Chrysanthemums, bronze', latin: 'Chrysanthemum Ã— morifolium',
     price: 3, unit: 'a stem', season: 'September to December',
     note: 'Grown under cloth in Goleta. Two weeks in a vase if the water is changed.',
     alt: 'A bunch of bronze chrysanthemums on white.',
@@ -67,13 +67,13 @@ export const flowers = [
     alt: 'A head of blue hydrangea.',
   },
   {
-    id: 'iris', photo: 's4', name: 'Irises, purple', latin: 'Iris × hollandica',
+    id: 'iris', photo: 's4', name: 'Irises, purple', latin: 'Iris Ã— hollandica',
     price: 14, unit: 'a bunch of ten', season: 'February to May',
     note: 'Grown in Arroyo Grande. Sold in tight bud. They open in a day.',
     alt: 'Purple irises.',
   },
   {
-    id: 'daisies', photo: 's8', name: 'Daisies, white', latin: 'Chrysanthemum × morifolium',
+    id: 'daisies', photo: 's8', name: 'Daisies, white', latin: 'Chrysanthemum Ã— morifolium',
     price: 10, unit: 'a bunch of ten', season: 'All year',
     note: 'Grown under cloth in Goleta. Two weeks in a vase.',
     alt: 'White daisies with yellow centers.',
@@ -154,5 +154,5 @@ export const shop = {
   email: 'orders@hollyhock.example',
   events: 'events@hollyhock.example',
   street: '418 East Haley Street',
-  city: 'Santa Barbara, California 93101',
+  city: 'Santa Barbara, California\u00A093101',
 };
