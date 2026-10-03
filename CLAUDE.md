@@ -23,3 +23,8 @@ By the owner's direction the layout follows a reference shop site (Twig & Arrow)
 - Respect `prefers-reduced-motion`.
 
 `plates/` holds botanical scans from an earlier version of this demo. Nothing in the site uses them.
+
+## Deploying
+
+The repo is github.com/Goodland-Web-Co/hollyhock and the Vercel project "hollyhock" builds from it. Push to main and Vercel deploys to production; nothing is deployed from the command line.
+
