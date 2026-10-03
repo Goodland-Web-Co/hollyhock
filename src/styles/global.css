@@ -1406,3 +1406,24 @@ a.button-light:hover { opacity: 0.8; }
 }
 /* on wide screens the menu wrapper gets out of the way, so the column lays out as before */
 @media (min-width: 960px) { .side-menu { display: contents; } }
+
+/* ================= small screens: a compact footer, logo first ================= */
+@media (max-width: 959px) {
+  .foot { padding: 44px var(--pad) 28px; border-top: 1px solid var(--mist); }
+  .foot-main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 34px 20px; align-items: start; }
+  .foot-logo-link { grid-column: 1 / -1; order: -1; width: 100%; padding-bottom: 26px; border-bottom: 1px solid var(--ink); }
+  .foot-mark { width: 140px; }
+  .foot-logo-link span { margin-top: 10px; }
+  .foot-col { min-width: 0; }
+  .foot-col h2 { font-size: 21px; margin-bottom: 12px; }
+  .foot-col p { font-size: 14px; line-height: 22px; }
+  .foot-col p + p { margin-top: 10px; }
+  .foot-col a:not(.foot-big) { font-size: 13px; letter-spacing: 0; overflow-wrap: anywhere; }
+  .foot-big { font-size: 23px; letter-spacing: 0.06em; }
+  .foot-right { text-align: left; }
+  .foot-right .foot-social { justify-content: flex-start; gap: 6px; margin-top: 8px !important; }
+  .foot-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; margin-top: 34px; padding-top: 6px; }
+  .foot-nav a { padding: 12px 0; border-bottom: 1px solid var(--mist); font-size: 12px; }
+  .foot-nav a:last-child { grid-column: 1 / -1; }
+  .foot-small { margin-top: 24px; font-size: 11px; line-height: 18px; max-width: 40ch; }
+}
