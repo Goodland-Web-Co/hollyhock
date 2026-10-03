@@ -1,0 +1,19 @@
+---
+import Shell from '../layouts/Shell.astro';
+import Tile from '../components/Tile.astro';
+import { all } from '../data/shop.js';
+---
+<Shell title="Search | Hollyhock" description="Search the flowers and arrangements sold at Hollyhock in Santa Barbara.">
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Search</span></nav>
+    <h1 class="display">Search</h1>
+    <form class="page-search" action="/search/" method="get" role="search">
+      <label class="visually-hidden" for="page-q">Search the shop</label>
+      <input id="page-q" name="q" type="search" placeholder="Try roses, Carpinteria or October" autocomplete="off" />
+    </form>
+    <p class="search-summary" id="search-summary" aria-live="polite">Everything in the shop.</p>
+    <div class="grid" id="search-grid">
+      {all.map((item) => <Tile level="h2" item={item} />)}
+    </div>
+  </div>
+</Shell>

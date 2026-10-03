@@ -1,0 +1,55 @@
+---
+import { Picture } from 'astro:assets';
+import Shell from '../../layouts/Shell.astro';
+import { photo } from '../../lib/photos.js';
+import Tile from '../../components/Tile.astro';
+import { all, money } from '../../data/shop.js';
+
+export function getStaticPaths() {
+  return all.map((item) => ({ params: { id: item.id }, props: { item } }));
+}
+const { item } = Astro.props;
+const groupOf = (p) => p.group || 'stem';
+const others = all.filter((p) => p.id !== item.id && groupOf(p) === groupOf(item)).slice(0, 3);
+---
+<Shell title={`${item.name} | Hollyhock`} description={`${item.name}, ${money(item.price)} ${item.unit}. ${item.note}`}>
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span><a href={item.kindHref}>{item.kind}</a><span aria-hidden="true">/</span><span>{item.name}</span>
+    </nav>
+    <div class="product">
+      <Picture
+        class="product-photo"
+        src={photo(item.photo)}
+        formats={['avif', 'webp']}
+        widths={[480, 768, 1024]}
+        sizes="(min-width: 960px) 40vw, 100vw"
+        alt={item.alt}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="product-text">
+        <h1 class="product-name">{item.name}</h1>
+        {item.latin && <p class="product-latin"><i>{item.latin}</i></p>}
+        <p class="product-price">{money(item.price)} {item.unit}</p>
+        <p>{item.note}</p>
+        <dl class="facts">
+          <div><dt>{item.seasonLabel || (item.latin ? 'In season' : 'Made')}</dt><dd>{item.season}</dd></div>
+          <div><dt>Collect</dt><dd>At the shop, Tuesday to Sunday</dd></div>
+          <div><dt>Delivery</dt><dd>Within Santa Barbara, $15</dd></div>
+        </dl>
+        <button class="button" type="button" data-add={item.id}>Add to the order slip</button>
+      </div>
+    </div>
+
+    <section class="lead also" aria-labelledby="also-title">
+      <div class="lead-text">
+        <h2 class="display" id="also-title">Also in the shop</h2>
+        <a class="button" href={item.kindHref}>See all {item.kind.toLowerCase()}</a>
+      </div>
+      <div class="grid">
+        {others.map((o) => <Tile item={o} />)}
+      </div>
+    </section>
+  </div>
+</Shell>

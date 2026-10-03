@@ -1,0 +1,60 @@
+---
+import { Picture } from 'astro:assets';
+import Shell from '../layouts/Shell.astro';
+import Divider from '../components/Divider.astro';
+import Hero from '../components/Hero.astro';
+import { photo } from '../lib/photos.js';
+import { shop } from '../data/shop.js';
+
+const ask = `mailto:${shop.events}?subject=${encodeURIComponent('Event date')}`;
+const kinds = [
+  { name: 'Dinners', price: 'From $65 a table', photo: 'event-setting', alt: 'A place setting with a blue napkin beside small vases of flowers.', text: 'Low arrangements or a row of bud vases, low enough to talk across. We bring the vessels and collect them the next day.' },
+  { name: 'Showers and parties', price: 'From $220', photo: 'event-centerpiece', alt: 'A footed bowl of orange, white and red flowers on a table by a window.', text: 'One large piece for the room and small ones for the tables, in the colors you give us.' },
+  { name: 'Openings and offices', price: 'From $150', photo: 'table', alt: 'A low arrangement of white and pink roses on a table set with glasses.', text: 'Flowers for a counter, a front desk or a gallery opening. Delivered before you unlock the door.' },
+];
+---
+<Shell
+  title="Events | Hollyhock"
+  description="Event flowers from Hollyhock in Santa Barbara: dinners, showers, parties and openings, delivered, set up and collected."
+  bare
+>
+  <Hero
+    title="Events"
+    text="Flowers for a dinner, a shower, a party or an opening."
+    image="event-table"
+    alt="A long white dinner table set with low arrangements of orange flowers."
+    pos="50% 60%"
+    href={ask}
+    label="Ask about a date"
+  >
+    <p>We deliver, set up, and come back for the vessels the next day. Two weeks' notice is enough for most things.</p>
+  </Hero>
+  <div class="page stack">
+    {kinds.map((k, i) => (
+      <section class:list={['pair', { 'pair-flip': i % 2 === 1 }]}>
+        <Picture src={photo(k.photo)} formats={['avif', 'webp']} widths={[480, 768, 1100]} sizes="(min-width: 960px) 40vw, 100vw" alt={k.alt} loading="lazy" />
+        <div class="pair-text">
+          <p class="eyebrow">{k.price}</p>
+          <h2 class="display">{k.name}</h2>
+          <p>{k.text}</p>
+        </div>
+      </section>
+    ))}
+
+<Divider />
+    <section class="band-mist steps" aria-labelledby="how-title">
+      <h2 class="display" id="how-title">How it works</h2>
+      <ol>
+        <li><h3>Tell us the room</h3><p>The date, the place, how many tables, and what you want to spend. A photograph of the room helps.</p></li>
+        <li><h3>You get it in writing</h3><p>A written estimate within three days, listing every piece and its price.</p></li>
+        <li><h3>We set it up</h3><p>We arrive two hours before your guests and are gone before they come.</p></li>
+        <li><h3>We collect</h3><p>The vessels come back to us the next day. The flowers are yours to send home with people.</p></li>
+      </ol>
+    </section>
+
+    <section class="closer" aria-labelledby="closer-title">
+      <h2 class="display" id="closer-title">Planning a wedding? <a href="/weddings/">See Weddings.</a></h2>
+      <a class="button" href={ask}>Ask about a date</a>
+    </section>
+  </div>
+</Shell>

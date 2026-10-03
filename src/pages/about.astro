@@ -1,0 +1,56 @@
+---
+import { Picture } from 'astro:assets';
+import Shell from '../layouts/Shell.astro';
+import Divider from '../components/Divider.astro';
+import Hero from '../components/Hero.astro';
+import { photo } from '../lib/photos.js';
+---
+<Shell
+  title="About Us | Hollyhock"
+  description="Hollyhock is a small flower shop on East Haley Street in Santa Barbara, selling cut flowers by the stem from growers within a day's drive."
+  bare
+>
+  <Hero
+    title="About us"
+    text="A small flower shop in a former print shop on East Haley Street, open since 2019."
+    image="shop"
+    alt="Steel buckets of pink, white and purple cut flowers lined up on the shop floor."
+    pos="50% 78%"
+    href="/contact/"
+    label="Find the shop"
+  >
+    <p>We sell by the stem because most people do not need a dozen of anything. If a flower is out of season we do not have it, and we will tell you what we have that is close.</p>
+  </Hero>
+  <div class="page stack">
+    <dl class="figures">
+      <div><dt>2019</dt><dd>The year we opened</dd></div>
+      <div><dt>Eleven</dt><dd>Growers, from Carpinteria to Arroyo Grande</dd></div>
+      <div><dt>Twice</dt><dd>A week we drive to them ourselves</dd></div>
+      <div><dt>One</dt><dd>Lot of our own, behind the shop</dd></div>
+    </dl>
+
+<Divider />
+    <section class="pair" aria-labelledby="buy-title">
+      <Picture src={photo('wrapping')} formats={['avif', 'webp']} widths={[480, 768, 1100]} sizes="(min-width: 960px) 34vw, 100vw" alt="A bouquet of pink and white flowers being wrapped in paper beside a roll of twine." loading="lazy" />
+      <div class="pair-text">
+        <h2 class="display" id="buy-title">How we buy</h2>
+        <p>On Tuesday and Friday mornings we drive to the growers. We buy what looks best that day, not what is on a list, so the shop is different every week.</p>
+        <p>Everything is wrapped in plain paper and tied with twine. No floral foam, no cellophane, no dye.</p>
+      </div>
+    </section>
+
+    <section class="pair pair-flip" aria-labelledby="name-title">
+      <Picture src={photo('arranging')} formats={['avif', 'webp']} widths={[480, 768, 1100]} sizes="(min-width: 960px) 34vw, 100vw" alt="Hands arranging pink and white flowers in a clear glass vase." loading="lazy" />
+      <div class="pair-text">
+        <h2 class="display" id="name-title">The name</h2>
+        <p>The shop is named for the hollyhocks along the back fence. They were here before we were, and they come back every June without being asked.</p>
+        <p>We cut them until September. They are the one flower in the shop that is never for sale by the stem.</p>
+      </div>
+    </section>
+
+    <section class="closer" aria-labelledby="closer-title">
+      <h2 class="display" id="closer-title">Come and see what came in.</h2>
+      <a class="button" href="/flowers/">See the flowers</a>
+    </section>
+  </div>
+</Shell>

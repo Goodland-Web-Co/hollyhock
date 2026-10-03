@@ -1,0 +1,36 @@
+---
+import Shell from '../layouts/Shell.astro';
+import Tile from '../components/Tile.astro';
+import { all, shop } from '../data/shop.js';
+
+const items = all.filter((p) => p.kind === 'Flowers');
+const ordered = [...items.filter((p) => p.group === 'arrangement'), ...items.filter((p) => p.group !== 'arrangement')];
+---
+<Shell
+  title="Flowers | Hollyhock"
+  description="Flowers from Hollyhock in Santa Barbara: three arrangements made every day at fixed prices, and cut flowers sold by the stem or the bunch."
+>
+  <div class="page">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Flowers</span></nav>
+    <header class="phead">
+      <h1 class="opener-title">Flowers</h1>
+      <p>Three arrangements made every day, and everything in the shop by the stem. Grown within a day's drive.</p>
+    </header>
+
+    <div class="filters" id="filters" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="arrangement" aria-pressed="false">Ready to go</button>
+      <button type="button" data-filter="stem" aria-pressed="false">By the stem</button>
+      <p id="filter-count" aria-live="polite">{ordered.length} items</p>
+    </div>
+
+    <div class="grid" id="shop-grid">
+      {ordered.map((item, i) => <Tile level="h2" item={item} eager={i < 4} />)}
+    </div>
+
+    <section class="closer" aria-labelledby="closer-title">
+      <h2 class="display" id="closer-title">Same day, if you call by noon.</h2>
+      <a class="button" href={`tel:${shop.tel}`}>Call {shop.phone}</a>
+    </section>
+  </div>
+</Shell>

@@ -1,0 +1,25 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../lib/photos.js';
+import { money } from '../data/shop.js';
+
+const { item, eager = false, level = 'h3' } = Astro.props;
+const Name = level;
+const search = [item.name, item.latin, item.note, item.season, item.kind, item.group].filter(Boolean).join(' ').toLowerCase();
+---
+<article class="tile" data-search={search} data-group={item.group || 'stem'}>
+  <a class="tile-photo" href={`/shop/${item.id}/`} tabindex="-1" aria-hidden="true">
+    <Picture
+      src={photo(item.photo)}
+      formats={['avif', 'webp']}
+      widths={[300, 480, 700]}
+      sizes="(min-width: 1280px) 22vw, (min-width: 700px) 30vw, 46vw"
+      alt=""
+      style={item.pos ? `object-position: ${item.pos}` : undefined}
+      loading={eager ? 'eager' : 'lazy'}
+    />
+  </a>
+  <Name class="tile-name"><a href={`/shop/${item.id}/`}>{item.name}</a></Name>
+  <p class="tile-price">{money(item.price)} {item.unit}</p>
+  <button class="tile-add" type="button" data-add={item.id} aria-label={`Add to slip: ${item.name}`}>Add to slip</button>
+</article>

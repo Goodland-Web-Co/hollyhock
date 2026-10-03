@@ -1,0 +1,26 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../lib/photos.js';
+
+const { title, text, image, alt, pos = '50% 50%', href, label } = Astro.props;
+---
+<header class="opener">
+  <div class="opener-text">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>{title}</span></nav>
+    <h1 class="opener-title">{title}</h1>
+    <p class="opener-lede">{text}</p>
+    <div class="opener-more"><slot /></div>
+    {href && <a class="button" href={href}>{label}</a>}
+  </div>
+  <Picture
+    class="opener-photo"
+    src={photo(image)}
+    formats={['avif', 'webp']}
+    widths={[640, 1024, 1400]}
+    sizes="(min-width: 960px) 44vw, 100vw"
+    alt={alt}
+    style={`object-position: ${pos}`}
+    loading="eager"
+    fetchpriority="high"
+  />
+</header>

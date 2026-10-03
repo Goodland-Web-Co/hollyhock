@@ -1,0 +1,124 @@
+﻿---
+import { Picture } from 'astro:assets';
+import Shell from '../layouts/Shell.astro';
+import Divider from '../components/Divider.astro';
+import { photo } from '../lib/photos.js';
+import { flowers, money } from '../data/shop.js';
+import heroPhoto from '../assets/hero-dahlia.jpg';
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const year = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const inShop = {
+  ranunculus: [2, 3, 4, 5],
+  'garden-roses': [4, 5, 6, 7, 8, 9, 10, 11],
+  peonies: [5, 6],
+  dahlias: [7, 8, 9, 10, 11],
+  'spray-roses': year,
+  'pink-roses': year,
+  tulips: [1, 2, 3, 4],
+  chrysanthemums: [9, 10, 11, 12],
+  cosmos: [6, 7, 8, 9, 10, 11],
+  sunflowers: [6, 7, 8, 9, 10],
+};
+const buildMonth = 10;
+
+const more = [
+  { href: '/gifts/', name: 'Gifts', photo: 'gift-chocolates', alt: 'An open box of assorted chocolates.', text: 'Candles, vases and chocolates, sent alone or with flowers.' },
+  { href: '/weddings/', name: 'Weddings', photo: 'home-weddings', alt: 'A bride in white holding a loose bouquet of white flowers, thistle and eucalyptus.', text: 'Two a month, with flowers from the same growers.' },
+  { href: '/events/', name: 'Events', photo: 'home-events', alt: 'A small glass vase of pink dahlias on a white tablecloth among wine glasses.', text: 'Dinners, showers and openings, set up and collected.' },
+];
+---
+<Shell
+  title="Hollyhock, florist, Santa Barbara"
+  description="Hollyhock is a florist on East Haley Street in Santa Barbara. Cut flowers by the stem, three arrangements made daily, weddings and events."
+  home
+  bare
+>
+  <a class="panel panel-hero" href="/flowers/">
+    <Picture
+      src={heroPhoto}
+      formats={['avif', 'webp']}
+      widths={[640, 1024, 1600, 2200]}
+      sizes="(min-width: 960px) 80vw, 100vw"
+      alt="A bouquet of orange roses, a yellow gerbera and green chrysanthemums on a white background."
+      loading="eager"
+      fetchpriority="high"
+    />
+    <span class="panel-cap">
+      <span class="panel-title">Flowers</span>
+      <span class="panel-text">Cut by the stem and arranged to order, in Santa Barbara.</span>
+    </span>
+  </a>
+
+  <div class="page">
+    <section class="maker" id="maker" aria-labelledby="maker-title">
+      <div class="sec-head">
+        <h2 class="display" id="maker-title">Make your own bunch</h2>
+        <p>Pick a month, add what you like, and we tie it the same day.</p>
+      </div>
+
+      <fieldset class="months">
+        <legend>In the shop in <span id="maker-month">{MONTHS[buildMonth - 1]}</span></legend>
+        <div class="month-row">
+          {MONTHS.map((m, i) => (
+            <label>
+              <input type="radio" name="month" value={i + 1} checked={i + 1 === buildMonth} />
+              <span><abbr title={m}>{m.slice(0, 3)}</abbr></span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="maker-body">
+        <ul class="picks">
+          {flowers.slice(0, 10).map((f) => (
+            <li class="pick" data-id={f.id} data-months={inShop[f.id].join(',')}>
+              <Picture src={photo(f.photo)} formats={['avif', 'webp']} widths={[200, 360, 520]} sizes="(min-width: 960px) 14vw, 44vw" alt={f.alt} style={f.pos ? `object-position: ${f.pos}` : undefined} loading="lazy" />
+              <h3>{f.name}</h3>
+              <p class="pick-price">{money(f.price)} {f.unit}</p>
+              <p class="pick-away" hidden></p>
+              <button class="pick-add" type="button" aria-label={`Add to bunch: ${f.name}`}>Add to bunch</button>
+              <div class="stepper" hidden>
+                <button type="button" data-pick="-1" aria-label={`One fewer: ${f.name}`}>âˆ’</button>
+                <span class="pick-count" aria-live="polite">1</span>
+                <button type="button" data-pick="1" aria-label={`One more: ${f.name}`}>+</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <aside class="bunch" aria-labelledby="bunch-title">
+          <h3 class="bunch-title" id="bunch-title">Your bunch <span id="bunch-count">0 stems</span></h3>
+          <p id="bunch-empty">Nothing in it yet. Add a flower to start.</p>
+          <ul class="bunch-lines" id="bunch-lines"></ul>
+          <div class="slip-total" id="bunch-total" hidden>
+            <span>Total</span><span class="leader" aria-hidden="true"></span><span id="bunch-sum"></span>
+          </div>
+          <button class="button" id="bunch-add" type="button" disabled>Add to order slip</button>
+          <p class="bunch-note">Tied and wrapped at no charge. Collect at the shop, or delivery within Santa Barbara for $15.</p>
+        </aside>
+      </div>
+    </section>
+
+    <Divider />
+
+    <section class="more" aria-labelledby="more-title">
+      <div class="sec-head">
+        <h2 class="display" id="more-title">More from the shop</h2>
+      </div>
+      <ul class="trio">
+        {more.map((m) => (
+          <li>
+            <a href={m.href} tabindex="-1" aria-hidden="true">
+              <Picture src={photo(m.photo)} formats={['avif', 'webp']} widths={[360, 560, 800]} sizes="(min-width: 960px) 24vw, 100vw" alt="" loading="lazy" />
+            </a>
+            <h3 class="trio-name"><a href={m.href}>{m.name}</a></h3>
+            <p>{m.text}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  <script type="application/json" id="maker-data" set:html={JSON.stringify({ months: MONTHS })} />
+</Shell>

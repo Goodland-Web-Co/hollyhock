@@ -1,0 +1,200 @@
+﻿---
+import '@fontsource/barlow-condensed/latin-100.css';
+import '@fontsource/barlow-condensed/latin-200.css';
+import '@fontsource/jost/latin-300.css';
+import '@fontsource/jost/latin-400.css';
+import '@fontsource/jost/latin-500.css';
+import '@fontsource/jost/latin-400-italic.css';
+import '../styles/global.css';
+import { Picture } from 'astro:assets';
+import { photo } from '../lib/photos.js';
+import { all, shop } from '../data/shop.js';
+
+const strip = [
+  ['s3', 'A basket of deep pink and orange dahlias.', 'Tuesday', 'Dahlias in from Carpinteria, still wet.'],
+  ['s5', 'Blue hydrangea.', 'Tuesday', 'Blue hydrangea. Six heads, gone by noon.'],
+  ['s6', 'Orange and red dahlias in a white vase.', 'Wednesday', 'A vase for the front desk at the hotel.'],
+  ['s8', 'White daisies.', 'Thursday', 'Daisies for a christening.'],
+  ['s4', 'Purple irises.', 'Friday', 'Irises from Arroyo Grande. They open in a day.'],
+  ['s7', 'Yellow, red and pink ranunculus.', 'Saturday', 'For a birthday on Garden Street.'],
+  ['s1', 'White lilies in a white vase.', 'Saturday', 'Lilies for the house on Laguna Street.'],
+  ['s9', 'A sunflower.', 'Sunday', 'Sunflowers from Lompoc. They do not shed.'],
+  ['s2', 'A bouquet of anemones, ranunculus and greenery.', 'Sunday', 'Made at six this morning, carried at four.'],
+];
+
+const { title, description, home = false, bare = false } = Astro.props;
+const path = Astro.url.pathname;
+const here = (href: string) => (path.startsWith(href) ? 'page' : undefined);
+
+const priced: Record<string, { name: string; price: number; unit: string }> = {};
+for (const p of all) priced[p.id] = { name: p.name, price: p.price, unit: p.unit };
+
+const Logo = home ? 'h1' : 'p';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to the page</a>
+
+    <header class="side">
+      <button class="slip-open" id="slip-open" type="button" aria-haspopup="dialog" aria-label="Order slip, 0 items">
+        <svg viewBox="0 0 24 28" width="24" height="28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.8 9.2h18.4v14.5a2.5 2.5 0 0 1-2.5 2.5H5.3a2.5 2.5 0 0 1-2.5-2.5z" /><path d="M7.6 9.2V6.4a4.4 4.4 0 0 1 8.8 0v2.8" /></svg>
+        <span id="slip-count" aria-hidden="true">0</span>
+      </button>
+
+      <Logo class="logo">
+        <a href="/" aria-label="Hollyhock, home">
+          <span class="logo-text" aria-hidden="true">Hollyhock</span>
+          {/* HOCK is one letter shorter than HOLLY; a small flower on a stem fills the fifth place. */}
+          <svg class="logo-mark" viewBox="0 6 172 106" width="172" height="106" aria-hidden="true">
+            <g class="logo-letters" text-anchor="middle">
+              <text x="12" y="50">H</text><text x="48" y="50">O</text><text x="84" y="50">L</text><text x="116" y="50">L</text><text x="150" y="50">Y</text>
+              <text x="12" y="108">H</text><text x="48" y="108">O</text><text x="84" y="108">C</text><text x="118" y="108">K</text>
+            </g>
+            <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M149.06 73.95A3.8 3.8 0 1 1 154.94 73.95A3.8 3.8 0 1 1 156.76 79.55A3.8 3.8 0 1 1 152 83A3.8 3.8 0 1 1 147.24 79.55A3.8 3.8 0 1 1 149.06 73.95z" />
+              <circle cx="152" cy="78" r="1.5" />
+              <path d="M152 86.8V107.300" />
+              <path d="M152 102c2.200-5.400 6.800-7.600 12.400-7.800-1 5.400-5.400 8.600-12.400 7.800z" />
+            </g>
+          </svg>
+        </a>
+      </Logo>
+      <p class="logo-sub">Florist, Santa Barbara</p>
+
+      <button class="menu-open" id="menu-open" type="button" aria-expanded="false" aria-controls="side-menu"><span class="menu-open-label">Menu</span><span class="menu-open-lines" aria-hidden="true"></span></button>
+
+      <div class="side-menu" id="side-menu">
+      <button class="menu-close" id="menu-close" type="button" aria-label="Close the menu"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 5l14 14M19 5L5 19" /></svg></button>
+      <nav class="side-nav" aria-label="Shop">
+        <ul>
+          <li><a href="/flowers/" aria-current={here('/flowers/')}>Flowers</a></li>
+          <li><a href="/gifts/" aria-current={here('/gifts/')}>Gifts</a></li>
+          <li><a href="/weddings/" aria-current={here('/weddings/')}>Weddings</a></li>
+          <li><a href="/events/" aria-current={here('/events/')}>Events</a></li>
+          <li><a href="/custom-orders/" aria-current={here('/custom-orders/')}>Custom Orders</a></li>
+          <li><a href="/about/" aria-current={here('/about/')}>About Us</a></li>
+        </ul>
+      </nav>
+
+      <nav class="side-second" aria-label="Help">
+        <ul>
+          <li><a href="/contact/" aria-current={here('/contact/')}>Contact Us</a></li>
+          <li class="small-only"><a href="/search/" aria-current={here('/search/')}>Search</a></li>
+          <li class="social">
+            <a href="https://www.instagram.com/" aria-label="Hollyhock on Instagram">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="17" height="17" rx="4.800" /><circle cx="12" cy="12" r="3.900" /><circle cx="16.900" cy="7.100" r="0.600" fill="currentColor" /></svg>
+            </a>
+          </li>
+          <li class="social">
+            <a href="https://www.facebook.com/" aria-label="Hollyhock on Facebook">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.8" fill="none" stroke="currentColor" stroke-width="1.5" /><path fill="currentColor" d="M13.6 20.500v-6.300h2.100l.35-2.500H13.600v-1.500c0-.75.25-1.250 1.300-1.250h1.250V6.750c-.3-.05-1-.1-1.850-.1-1.900 0-3.150 1.150-3.150 3.200v1.850H9.100v2.500h2.050v6.300z" /></svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <form class="side-search" action="/search/" method="get" role="search">
+        <label class="visually-hidden" for="side-q">Search the shop</label>
+        <input id="side-q" name="q" type="search" placeholder="Search..." autocomplete="off" />
+        <button type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+        </button>
+      </form>
+      </div>
+    </header>
+
+    <div class="main">
+      <main id="content" class:list={{ bare }}>
+        <slot />
+      </main>
+
+      <section class="strip" aria-labelledby="strip-title">
+        <div class="strip-head">
+          <h2 class="display" id="strip-title">Lately at the shop</h2>
+          <div class="strip-nav">
+            <button type="button" id="strip-prev" aria-label="Earlier photographs">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 12H4M10 6l-6 6 6 6" /></svg>
+            </button>
+            <button type="button" id="strip-next" aria-label="Later photographs">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6" /></svg>
+            </button>
+          </div>
+        </div>
+        <p class="strip-count" aria-hidden="true"><span id="strip-now">01</span> / {String(strip.length).padStart(2, '0')}</p>
+        <ul class="strip-row" id="strip-row" aria-label="Photographs from the shop this week">
+          {strip.map(([name, alt, day, note], n) => (
+            <li class:list={{ 'is-active': n === 0 }}>
+              <button type="button" class="slide" aria-label={`${day}: ${note}`}>
+                <Picture src={photo(name)} formats={['avif', 'webp']} widths={[320, 640, 1000]} sizes="(min-width: 960px) 40vw, 72vw" alt={alt} loading="lazy" />
+              </button>
+              <p><span>{day}</span>{note}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <footer class="foot">
+        <div class="foot-main">
+          <div class="foot-col">
+            <h2>Visit</h2>
+            <p>{shop.street}<br />{shop.city}</p>
+            <p>Tuesday to Saturday, 9 to 5<br />Sunday, 10 to 2</p>
+          </div>
+          <a class="foot-logo-link" href="/" aria-label="Hollyhock, home">
+            <svg class="foot-mark" viewBox="0 6 172 106" width="172" height="106" aria-hidden="true">
+            <g class="logo-letters" text-anchor="middle">
+              <text x="12" y="50">H</text><text x="48" y="50">O</text><text x="84" y="50">L</text><text x="116" y="50">L</text><text x="150" y="50">Y</text>
+              <text x="12" y="108">H</text><text x="48" y="108">O</text><text x="84" y="108">C</text><text x="118" y="108">K</text>
+            </g>
+            <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M149.06 73.95A3.8 3.8 0 1 1 154.94 73.95A3.8 3.8 0 1 1 156.76 79.55A3.8 3.8 0 1 1 152 83A3.8 3.8 0 1 1 147.24 79.55A3.8 3.8 0 1 1 149.06 73.95z" />
+              <circle cx="152" cy="78" r="1.5" />
+              <path d="M152 86.8V107.300" />
+              <path d="M152 102c2.200-5.400 6.800-7.600 12.400-7.800-1 5.400-5.400 8.600-12.400 7.800z" />
+            </g>
+          </svg>
+            <span>Florist, Santa Barbara</span>
+          </a>
+          <div class="foot-col foot-right">
+            <h2>Order</h2>
+            <p><a class="foot-big" href={`tel:${shop.tel}`}>{shop.phone}</a></p>
+            <p><a href={`mailto:${shop.email}`}>{shop.email}</a></p>
+            <p class="foot-social">
+              <a href="https://www.instagram.com/" aria-label="Hollyhock on Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="17" height="17" rx="4.800" /><circle cx="12" cy="12" r="3.900" /><circle cx="16.900" cy="7.100" r="0.600" fill="currentColor" /></svg></a>
+              <a href="https://www.facebook.com/" aria-label="Hollyhock on Facebook"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.8" fill="none" stroke="currentColor" stroke-width="1.5" /><path fill="currentColor" d="M13.6 20.500v-6.300h2.100l.35-2.500H13.600v-1.500c0-.75.25-1.250 1.300-1.250h1.250V6.750c-.3-.05-1-.1-1.850-.1-1.900 0-3.150 1.150-3.150 3.200v1.850H9.100v2.500h2.050v6.300z" /></svg></a>
+            </p>
+          </div>
+        </div>
+        <nav class="foot-nav" aria-label="Footer">
+          <a href="/flowers/">Flowers</a><a href="/gifts/">Gifts</a><a href="/weddings/">Weddings</a><a href="/events/">Events</a><a href="/custom-orders/">Custom Orders</a><a href="/about/">About Us</a><a href="/contact/">Contact Us</a>
+        </nav>
+        <p class="foot-small">Hollyhock is a fictional shop made as a design demonstration. Photographs are free-licensed stock (CC0 and Unsplash).</p>
+      </footer>
+    </div>
+
+    <dialog class="slip" id="slip" aria-labelledby="slip-title">
+      <form method="dialog"><button class="text-button close" type="submit">Close</button></form>
+      <h2 id="slip-title">Order slip</h2>
+      <p id="slip-empty">Nothing on the slip yet. Add flowers by the stem or one of the arrangements.</p>
+      <ul class="slip-lines" id="slip-lines"></ul>
+      <div class="slip-total" id="slip-total" hidden>
+        <span>Total</span><span class="leader" aria-hidden="true"></span><span id="slip-sum"></span>
+      </div>
+      <p id="slip-next" hidden>
+        Orders are confirmed by a person. <a id="slip-send" href={`mailto:${shop.email}`}>Send the slip by email</a> or read it to us at <a href={`tel:${shop.tel}`}>{shop.phone}</a>. Collect at the shop, or delivery within Santa Barbara for $15.
+      </p>
+    </dialog>
+
+    <script type="application/json" id="shop-data" set:html={JSON.stringify({ priced, email: shop.email })} />
+    <script src="../scripts/app.js"></script>
+  </body>
+</html>

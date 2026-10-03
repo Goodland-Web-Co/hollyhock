@@ -1,0 +1,48 @@
+---
+import { Picture } from 'astro:assets';
+import Shell from '../layouts/Shell.astro';
+import { photo } from '../lib/photos.js';
+import { shop } from '../data/shop.js';
+---
+<Shell
+  title="Contact Us | Hollyhock"
+  description="Hollyhock is at 418 East Haley Street, Santa Barbara. Open Tuesday to Saturday 9 to 5 and Sunday 10 to 2. Telephone (805) 555-0142."
+>
+  <div class="page stack">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Contact Us</span></nav>
+    <section class="split2 split2-even">
+      <div class="contact-main">
+        <h1 class="opener-title">Contact us</h1>
+        <p class="lede">We would love to hear from you. Whoever picks up is standing right beside the flowers.</p>
+        <p class="big-link"><a href={`tel:${shop.tel}`}>{shop.phone}</a></p>
+        <dl class="facts facts-wide">
+          <div><dt>Orders</dt><dd><a href={`mailto:${shop.email}`}>{shop.email}</a></dd></div>
+          <div><dt>Weddings</dt><dd><a href={`mailto:${shop.events}`}>{shop.events}</a></dd></div>
+          <div><dt>Address</dt><dd>{shop.street}<br />{shop.city}</dd></div>
+          <div><dt>Hours</dt><dd>Tuesday to Saturday, 9 to 5<br />Sunday, 10 to 2</dd></div>
+          <div><dt>Parking</dt><dd>Two spaces behind the shop, off the alley. Haley Street is free for 75 minutes.</dd></div>
+          <div><dt>Delivery</dt><dd>Santa Barbara, $15. Goleta, Montecito and Carpinteria, $25. Order by noon for the same day.</dd></div>
+        </dl>
+      </div>
+      <form class="cform" id="cform" data-to={shop.email}>
+        <Picture class="cform-bg" src={photo('pink-roses')} formats={['avif', 'webp']} widths={[700, 1100]} sizes="40vw" alt="" loading="eager" />
+        <h2 class="display">Send a note</h2>
+        <label for="c-name">Your name</label>
+        <input id="c-name" name="name" type="text" autocomplete="name" required />
+        <label for="c-tel">Telephone or email</label>
+        <input id="c-tel" name="tel" type="text" />
+        <label for="c-about">What is it about</label>
+        <select id="c-about" name="about">
+          <option>An order</option>
+          <option>A wedding</option>
+          <option>An event</option>
+          <option>Something else</option>
+        </select>
+        <label for="c-msg">Your note</label>
+        <textarea id="c-msg" name="msg" rows="5" required></textarea>
+        <button class="button" type="submit">Send the note</button>
+        <p class="cform-note">This opens your email with the note filled in. We answer the same day the shop is open.</p>
+      </form>
+    </section>
+  </div>
+</Shell>

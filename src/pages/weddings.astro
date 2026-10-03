@@ -1,0 +1,75 @@
+---
+import { Picture } from 'astro:assets';
+import Shell from '../layouts/Shell.astro';
+import Divider from '../components/Divider.astro';
+import { photo } from '../lib/photos.js';
+import { shop } from '../data/shop.js';
+
+const ask = `mailto:${shop.events}?subject=${encodeURIComponent('Wedding date')}`;
+const gallery = [
+  ['wedding-couple', 'A couple holding a bouquet of pink, white and blue flowers between them.'],
+  ['wedding-table', 'A long dinner table set with low flower arrangements.'],
+  ['home-weddings', 'A bride in white holding a loose bouquet of white flowers, thistle and eucalyptus.'],
+  ['wedding-bouquet', 'A loose bouquet of white flowers and trailing greenery.'],
+];
+---
+<Shell
+  title="Weddings | Hollyhock"
+  description="Hollyhock takes two weddings or events a month in Santa Barbara County, with flowers from the same growers that supply the shop."
+  bare
+>
+  <header class="cover">
+    <Picture src={photo('wedding-dress')} formats={['avif', 'webp']} widths={[640, 1024, 1600]} sizes="(min-width: 960px) 80vw, 100vw" alt="A bouquet of white and pale pink flowers resting on a white wedding dress." loading="eager" fetchpriority="high" />
+    <div class="cover-text">
+      <h1 class="opener-title">Weddings</h1>
+      <p>Two a month, with flowers from the same growers that supply the shop.</p>
+      <a class="button button-light" href={ask}>Ask about a date</a>
+    </div>
+  </header>
+
+  <div class="page stack">
+    <section class="two" aria-labelledby="season-lede">
+      <h2 class="display" id="season-lede">The work follows the season</h2>
+      <div>
+        <p>A June wedding gets peonies and garden roses. An October wedding gets dahlias. We do not fly flowers in, so what you carry was growing nearby that week.</p>
+        <dl class="facts">
+          <div><dt>Bouquets</dt><dd>From $180. Bridal and attendant bouquets, boutonnieres and crowns.</dd></div>
+          <div><dt>Tables</dt><dd>From $65 a table. Low arrangements, bud vases or a runner of loose stems.</dd></div>
+          <div><dt>Ceremony</dt><dd>From $450. An arch, an aisle or a pair of urns, moved to the reception after.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+<Divider />
+    <ul class="gallery">
+      {gallery.map(([name, alt]) => (
+        <li><Picture src={photo(name)} formats={['avif', 'webp']} widths={[400, 700, 1100]} sizes="(min-width: 960px) 38vw, 50vw" alt={alt} loading="lazy" /></li>
+      ))}
+    </ul>
+
+    <section class="band-mist steps" aria-labelledby="how-title">
+      <h2 class="display" id="how-title">How it works</h2>
+      <ol>
+        <li><h3>We meet at the shop</h3><p>One hour, with coffee. Bring pictures, a color, or nothing at all.</p></li>
+        <li><h3>You get it in writing</h3><p>A written estimate within a week, listing every piece and its price.</p></li>
+        <li><h3>We hold the date</h3><p>A deposit of one quarter holds it. We ask for eight weeks' notice, more in May and June.</p></li>
+        <li><h3>We set it up</h3><p>We deliver and set up anywhere in Santa Barbara County, and collect the vessels the next day.</p></li>
+      </ol>
+    </section>
+
+    <section class="two" aria-labelledby="season-title">
+      <h2 class="display" id="season-title">What is in season</h2>
+      <dl class="facts">
+        <div><dt>Spring</dt><dd>Ranunculus, tulips, sweet peas, anemones</dd></div>
+        <div><dt>Summer</dt><dd>Peonies, garden roses, cosmos, zinnias</dd></div>
+        <div><dt>Autumn</dt><dd>Dahlias, chrysanthemums, amaranth</dd></div>
+        <div><dt>Winter</dt><dd>Roses under glass, narcissus, branches</dd></div>
+      </dl>
+    </section>
+
+    <section class="closer" aria-labelledby="closer-title">
+      <h2 class="display" id="closer-title">Tell us the date.</h2>
+      <a class="button" href={ask}>Write to {shop.events}</a>
+    </section>
+  </div>
+</Shell>
